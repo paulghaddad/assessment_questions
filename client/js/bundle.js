@@ -2325,6 +2325,7 @@ const React = __webpack_require__(0);
 const ReactDOM = __webpack_require__(37);
 
 
+
 const Questions = __webpack_require__(77);
 
 const QUESTIONS = [{ id: 0, question: "What is 7343 6708?", answer: "635",
@@ -2352,7 +2353,7 @@ const App = () => React.createElement(
   null,
   React.createElement(AppTitle, null),
   React.createElement(AppDescription, null),
-  React.createElement(Questions, null)
+  React.createElement(Questions, { questions: QUESTIONS })
 );
 
 ReactDOM.render(React.createElement(
@@ -25625,16 +25626,13 @@ class Questions extends React.Component {
     return React.createElement(
       'ul',
       null,
-      React.createElement(
-        'li',
-        null,
-        'Question 1'
-      ),
-      React.createElement(
-        'li',
-        null,
-        'Question 2'
-      )
+      Object.keys(this.props.questions).map(question => {
+        return React.createElement(
+          'li',
+          { key: question },
+          this.props.questions[question].question
+        );
+      })
     );
   }
 }

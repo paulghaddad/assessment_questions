@@ -4,8 +4,11 @@ class Questions extends React.Component {
   render() {
     return (
       <ul>
-        <li>Question 1</li>
-        <li>Question 2</li>
+        {Object.keys(this.props.questions).map(question => {
+          return <li key={question}>
+            {this.props.questions[question].question}
+          </li>
+        })}
       </ul>
     )
   }

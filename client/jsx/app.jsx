@@ -28,7 +28,7 @@ const App = () => (
   <div>
     <AppTitle />
     <AppDescription />
-    <Questions />
+    <Questions questions={QUESTIONS} />
   </div>
 )
 
