@@ -10,9 +10,9 @@ import {
 const Questions = require('./questions.jsx');
 
 const QUESTIONS = [
-  { id: 0, question: "What is 7343 6708?", answer: "635",
+  { id: 0, title: "What is 7343 6708?", answer: "635",
     distractors: ["688", "7171", "7023"] },
-  { id: 1, question: "What is your name?", answer: "Paul",
+  { id: 1, title: "What is your name?", answer: "Paul",
     distractors: ["Steve", "Bob", "Richard"] }
 ];
 

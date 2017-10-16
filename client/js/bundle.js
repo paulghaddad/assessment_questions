@@ -2328,8 +2328,8 @@ const ReactDOM = __webpack_require__(37);
 
 const Questions = __webpack_require__(77);
 
-const QUESTIONS = [{ id: 0, question: "What is 7343 6708?", answer: "635",
-  distractors: ["688", "7171", "7023"] }, { id: 1, question: "What is your name?", answer: "Paul",
+const QUESTIONS = [{ id: 0, title: "What is 7343 6708?", answer: "635",
+  distractors: ["688", "7171", "7023"] }, { id: 1, title: "What is your name?", answer: "Paul",
   distractors: ["Steve", "Bob", "Richard"] }];
 
 const AppTitle = () => {
@@ -25620,6 +25620,7 @@ module.exports = function hoistNonReactStatics(targetComponent, sourceComponent,
 /***/ (function(module, exports, __webpack_require__) {
 
 const React = __webpack_require__(0);
+const Question = __webpack_require__(78);
 
 class Questions extends React.Component {
   render() {
@@ -25627,17 +25628,31 @@ class Questions extends React.Component {
       'ul',
       null,
       Object.keys(this.props.questions).map(question => {
-        return React.createElement(
-          'li',
-          { key: question },
-          this.props.questions[question].question
-        );
+        return React.createElement(Question, { key: question, question: this.props.questions[question] });
       })
     );
   }
 }
 
 module.exports = Questions;
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const React = __webpack_require__(0);
+
+class Question extends React.Component {
+  render() {
+    return React.createElement(
+      'li',
+      null,
+      this.props.question.title
+    );
+  }
+}
+
+module.exports = Question;
 
 /***/ })
 /******/ ]);
