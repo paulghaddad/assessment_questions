@@ -7,7 +7,8 @@
     "dev-server": "webpack-dev-server --progress --colors",
     "build": "webpack --progress --colors",
     "start:dev-server": "npm run build && npm run dev-server",
-    "test": "npm test"
+    "test": "jest",
+    "test-watch": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,12 @@
       "node_modules/**/*.js"
     ]
   },
+  "jest": {
+    "verbose": true,
+    "transform": {
+        "^.+\\.jsx?$": "babel-jest"
+    }
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
@@ -39,6 +46,7 @@
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-es2017": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "jest": "^21.2.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "webpack": "^3.7.1",
