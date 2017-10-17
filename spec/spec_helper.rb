@@ -1,9 +1,12 @@
-require 'rack/test'
-require 'rspec'
+# frozen_string_literal: true
 
-ENV['RACK_ENV'] = 'test'
+require "rack/test"
+require "rspec"
 
-require File.expand_path '../../app/main.rb', __FILE__
+ENV["RACK_ENV"] = "test"
+
+require File.expand_path("../../app/main.rb", __FILE__)
+require "json_matchers/rspec"
 
 module RSpecMixin
   include Rack::Test::Methods

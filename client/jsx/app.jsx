@@ -1,5 +1,6 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
+const axios = require('axios');
 
 import {
   BrowserRouter as Router,
@@ -9,13 +10,6 @@ import {
 
 const Questions = require('./questions.jsx');
 
-const QUESTIONS = [
-  { id: 0, title: "What is 7343 6708?", answer: "635",
-    distractors: ["688", "7171", "7023"] },
-  { id: 1, title: "What is your name?", answer: "Paul",
-    distractors: ["Steve", "Bob", "Richard"] }
-];
-
 const AppTitle = () => {
   return <h1>All Questions</h1>
 };
@@ -24,13 +18,40 @@ const AppDescription = () => {
   return <p>Click on a question to see its possible answers</p>
 };
 
-const App = () => (
-  <div>
-    <AppTitle />
-    <AppDescription />
-    <Questions questions={QUESTIONS} />
-  </div>
-)
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {questions: []};
+  }
+
+  componentDidMount() {
+    axios.get('http://localhost:4567/questions')
+    .then(response => {
+      console.log(response);
+      this.setState({
+        questions: response.data.questions
+      });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+  }
+
+  componentWillUnmount() {
+    this.serverRequest.abort();
+  }
+
+  render() {
+    return (
+      <div>
+        <AppTitle />
+        <AppDescription />
+        <Questions questions={this.state.questions} />
+      </div>
+    )
+  }
+}
 
 ReactDOM.render((
   <Router>
