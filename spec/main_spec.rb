@@ -7,7 +7,9 @@ describe "Questions API" do
     it "a valid schema" do
       get "/questions"
 
-      expect(last_response).to match_response_schema("questions")
+      response_body = JSON.parse(last_response.body)
+
+      expect(response_body).to match_response_schema("questions")
     end
 
     it "provide all the questions" do
@@ -16,7 +18,7 @@ describe "Questions API" do
       response_body = JSON.parse(last_response.body)
 
       expect(last_response.status).to eq(200)
-      expect(response_body["questions"].size).to eq(2)
+      expect(response_body.size).to eq(4000)
     end
   end
 end

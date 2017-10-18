@@ -3034,7 +3034,7 @@ class App extends React.Component {
     axios.get('http://localhost:4567/questions').then(response => {
       console.log(response);
       this.setState({
-        questions: response.data.questions
+        questions: response.data
       });
     }).catch(function (error) {
       console.log(error);

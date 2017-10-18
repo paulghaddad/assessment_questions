@@ -29,7 +29,7 @@ class App extends React.Component {
     .then(response => {
       console.log(response);
       this.setState({
-        questions: response.data.questions
+        questions: response.data
       });
     })
     .catch(function (error) {

@@ -1,16 +1,14 @@
 {
-  "type": "object",
-  "required": ["questions"],
-  "properties": {
-    "questions": {
-      "type": "array",
-      "items":{
-        "required": ["id", "title", "answer"],
-        "properties": {
-          "id": { "type": "integer" },
-          "title": { "type": "string" },
-          "body": { "type": "string" }
-        }
+  "type": "array",
+  "items": {
+    "type": "object",
+    "items":{
+      "required": ["id", "title", "answer"],
+      "properties": {
+        "id": { "type": "integer" },
+        "title": { "type": "string" },
+        "answer": { "type": "string" },
+        "distractors": { "type": "array" }
       }
     }
   }
