@@ -3,10 +3,10 @@
 require File.expand_path("../spec_helper.rb", __FILE__)
 require File.expand_path("../../app/questions_importer.rb", __FILE__)
 
-describe QuestionImporter do
+describe QuestionsImporter do
   describe "#import_csv" do
     it "parses the csv file to a json object" do
-      questions_importer = QuestionImporter.new(file: csv_file)
+      questions_importer = QuestionsImporter.new(file: csv_file)
 
       parsed_questions = questions_importer.import_csv
 
@@ -21,6 +21,6 @@ describe QuestionImporter do
   end
 
   QUESTIONS_JSON = <<~JSON.strip
-    {\"questions\":[{\"question\":\"What is 1754 - 3936?\",\"answer\":\"-2182\",\"distractors\":[\"3176\",\"6529\",\"6903\"]},{\"question\":\"What is 3009 * 5075?\",\"answer\":\"15270675\",\"distractors\":[\"3572\",\"8772\",\"9415\"]}]}
+    {\"questions\":[{\"id\":1,\"title\":\"What is 1754 - 3936?\",\"answer\":\"-2182\",\"distractors\":[\"3176\",\"6529\",\"6903\"]},{\"id\":2,\"title\":\"What is 3009 * 5075?\",\"answer\":\"15270675\",\"distractors\":[\"3572\",\"8772\",\"9415\"]}]}
   JSON
 end

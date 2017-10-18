@@ -3,7 +3,7 @@
 require "csv"
 require "json"
 
-class QuestionImporter
+class QuestionsImporter
   attr_reader :file
 
   def initialize(file:)
@@ -21,14 +21,17 @@ class QuestionImporter
   def build_questions
     questions = { questions: [] }
 
+    index = 1
     CSV.parse(file, headers: true, col_sep: "|") do |row|
       question = {
-        question: row["question"],
+        id: index,
+        title: row["question"],
         answer: row["answer"],
         distractors: row["distractors"].split(", ")
       }
 
       questions[:questions] << question
+      index += 1
     end
 
     questions
