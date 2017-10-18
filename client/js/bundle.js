@@ -3007,6 +3007,7 @@ const axios = __webpack_require__(57);
 
 
 const Questions = __webpack_require__(103);
+const CreateQuestionForm = __webpack_require__(105);
 
 const AppTitle = () => {
   return React.createElement(
@@ -3024,22 +3025,36 @@ const AppDescription = () => {
   );
 };
 
+const QUESTIONS = [{ id: 0, title: "What is 7343 6708?", answer: "635", distractors: ["688", "7171", "7023"] }, { id: 1, title: "What is your name?", answer: "Paul", distractors: ["Steve", "Bob", "Richard"] }];
+
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { questions: [] };
+    this.state = { questions: QUESTIONS };
+    this.handleNewQuestion = this.handleNewQuestion.bind(this);
   }
 
-  componentDidMount() {
-    axios.get('http://localhost:4567/questions').then(response => {
-      console.log(response);
-      this.setState({
-        questions: response.data
-      });
-    }).catch(function (error) {
-      console.log(error);
-    });
+  handleNewQuestion(title, answer, distractors) {
+    // Make create call to API here.
+    let newQuestions = this.state.questions;
+
+    newQuestions.push({ title: title, answer: answer, distractors: distractors });
+    this.setState({ questions: newQuestions });
   }
+
+  // componentDidMount() {
+  //   axios.get('http://localhost:4567/questions')
+  //   .then(response => {
+  //     console.log(response);
+  //     this.setState({
+  //       questions: response.data
+  //     });
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //   });
+  //
+  // }
 
   componentWillUnmount() {
     this.serverRequest.abort();
@@ -3051,7 +3066,8 @@ class App extends React.Component {
       null,
       React.createElement(AppTitle, null),
       React.createElement(AppDescription, null),
-      React.createElement(Questions, { questions: this.state.questions })
+      React.createElement(Questions, { questions: this.state.questions }),
+      React.createElement(CreateQuestionForm, { onCreateNewQuestion: this.handleNewQuestion })
     );
   }
 }
@@ -27227,6 +27243,97 @@ class Question extends React.Component {
 }
 
 module.exports = Question;
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const React = __webpack_require__(0);
+
+class CreateQuestionForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { title: '', answer: '', distractors: new Array(3) };
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    if (name.match(/distractor/)) {
+      let number = name.match(/\d/)["0"];
+      let updatedDistractors = this.state.distractors.slice();
+
+      updatedDistractors[number - 1] = value;
+
+      this.setState({
+        distractors: updatedDistractors
+      });
+    } else {
+      this.setState({
+        [name]: value
+      });
+    }
+  }
+
+  handleSubmit(event) {
+    console.log('Submitted!', this.state.title, this.state.answer, this.state.distractors);
+    event.preventDefault();
+    this.props.onCreateNewQuestion(this.state.title, this.state.answer, this.state.distractors);
+  }
+
+  render() {
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'h1',
+        null,
+        'Create a New Question:'
+      ),
+      React.createElement(
+        'form',
+        { onSubmit: this.handleSubmit },
+        React.createElement(
+          'label',
+          null,
+          'Title:',
+          React.createElement('input', { type: 'text', name: 'title', value: this.state.title, onChange: this.handleInputChange })
+        ),
+        React.createElement(
+          'label',
+          null,
+          'Answer:',
+          React.createElement('input', { type: 'text', name: 'answer', value: this.state.answer, onChange: this.handleInputChange })
+        ),
+        React.createElement(
+          'label',
+          null,
+          'Distractor 1:',
+          React.createElement('input', { type: 'text', name: 'distractor_1', value: this.state.distractor_1, onChange: this.handleInputChange })
+        ),
+        React.createElement(
+          'label',
+          null,
+          'Distractor 2:',
+          React.createElement('input', { type: 'text', name: 'distractor_2', value: this.state.distractor_2, onChange: this.handleInputChange })
+        ),
+        React.createElement(
+          'label',
+          null,
+          'Distractor 3:',
+          React.createElement('input', { type: 'text', name: 'distractor_3', value: this.state.distractor_3, onChange: this.handleInputChange })
+        ),
+        React.createElement('input', { type: 'submit', value: 'Submit' })
+      )
+    );
+  }
+}
+
+module.exports = CreateQuestionForm;
 
 /***/ })
 /******/ ]);
