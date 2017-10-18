@@ -18,3 +18,24 @@ get "/questions" do
   content_type :json
   questions_data_store.all.to_json
 end
+
+get "/questions/:id" do
+  response["Access-Control-Allow-Origin"] = "*"
+  status 200
+  content_type :json
+  questions_data_store.find(params["id"]).to_json
+end
+
+post "/questions" do
+  response["Access-Control-Allow-Origin"] = "*"
+  status 201
+  content_type :json
+  questions_data_store.create(params).to_json
+end
+
+patch "/questions/:id" do
+  response["Access-Control-Allow-Origin"] = "*"
+  status 200
+  content_type :json
+  questions_data_store.update(params).to_json
+end
