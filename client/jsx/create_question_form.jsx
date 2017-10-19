@@ -3,7 +3,8 @@ const React = require('react');
 class CreateQuestionForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {title: '', answer: '', distractors: new Array(3)};
+    let baseState = {title: '', answer: '', distractors: new Array(3)};
+    this.state = Object.assign(baseState, props.question);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -30,9 +31,9 @@ class CreateQuestionForm extends React.Component {
   }
 
   handleSubmit(event) {
-    console.log('Submitted!', this.state.title, this.state.answer, this.state.distractors);
+    console.log('Submitted!', this.state.title, this.state.answer, this.state.distractors, this.state.id);
     event.preventDefault();
-    this.props.onCreateNewQuestion(this.state.title, this.state.answer, this.state.distractors);
+    this.props.onCreateNewQuestion(this.state.title, this.state.answer, this.state.distractors, this.state.id);
   }
 
   render() {
@@ -41,6 +42,7 @@ class CreateQuestionForm extends React.Component {
         <h1>Create a New Question:</h1>
 
         <form onSubmit={this.handleSubmit} >
+          <input  type="hidden" name="questionId" value={this.state.id} />
           <label>
             Title:
             <input type='text' name='title' value={this.state.title} onChange={this.handleInputChange} />
