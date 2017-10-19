@@ -30,6 +30,7 @@ class App extends React.Component {
     this.state = {questions: []};
     this.handleQuestionUpdate = this.handleQuestionUpdate.bind(this);
     this.handleQuestionRequest = this.handleQuestionRequest.bind(this);
+    this.createQuestion = this.createQuestion.bind(this);
   }
 
   handleQuestionUpdate(title, answer, distractors, id) {
@@ -45,8 +46,9 @@ class App extends React.Component {
       this.setState({questions: questionsCopy});
     } else {
       console.log('create');
-      let newQuestions = existingQuestions.concat({title: title, answer: answer, distractors: distractors});
-      this.setState({questions: newQuestions});
+      this.createQuestion(title, answer, distractors);
+      // let newQuestions = existingQuestions.concat({title: title, answer: answer, distractors: distractors});
+      // this.setState({questions: newQuestions});
     }
   }
 
@@ -56,10 +58,29 @@ class App extends React.Component {
     axios.get('http://localhost:4567/questions/' + id)
     .then(response => {
       console.log(response);
-      updatedQuestions[id] = response.data;
+      updatedQuestions[id - 1] = response.data;
       this.setState({
         questions: updatedQuestions
       });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  createQuestion(title, answer, distractors) {
+    console.log('Question creation', title, answer, distractors);
+    axios.post('http://localhost:4567/questions', {
+      title: title,
+      answer: answer,
+      distractors: distractors
+    })
+    .then(response => {
+      console.log('created!');
+      console.log(response.headers);
+      let location = response.headers.location;
+      console.log(location);
+      this.handleQuestionRequest(location.match(/\d+$/)[0]);
     })
     .catch(function (error) {
       console.log(error);
@@ -82,7 +103,6 @@ class App extends React.Component {
   componentWillUnmount() {
     this.serverRequest.abort();
   }
-
 
   render() {
     return (
