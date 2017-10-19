@@ -28,15 +28,25 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {questions: QUESTIONS};
-    this.handleNewQuestion = this.handleNewQuestion.bind(this);
+    this.handleQuestionUpdate = this.handleQuestionUpdate.bind(this);
   }
 
-  handleNewQuestion(title, answer, distractors) {
+  handleQuestionUpdate(title, answer, distractors, id) {
     // Make create call to API here.
-    let newQuestions = this.state.questions;
+    let existingQuestions = this.state.questions;
 
-    newQuestions.push({title: title, answer: answer, distractors: distractors});
-    this.setState({questions: newQuestions});
+    if (id !== undefined) {
+      console.log('edit');
+      let questionsCopy = this.state.questions.slice();
+      let questionToUpdate = this.state.questions[id];
+      let updatedQuestion = Object.assign(questionToUpdate, {id: id, title: title, answer: answer, distractors: distractors});
+      questionsCopy[id] = updatedQuestion;
+      this.setState({questions: questionsCopy});
+    } else {
+      console.log('create');
+      let newQuestions = existingQuestions.concat({title: title, answer: answer, distractors: distractors});
+      this.setState({questions: newQuestions});
+    }
   }
 
   // componentDidMount() {
@@ -63,8 +73,8 @@ class App extends React.Component {
       <div>
         <AppTitle />
         <AppDescription />
-        <Questions questions={this.state.questions} />
-        <CreateQuestionForm onCreateNewQuestion={this.handleNewQuestion} />
+        <Questions onCreateNewQuestion={this.handleQuestionUpdate} questions={this.state.questions} />
+        <CreateQuestionForm onCreateNewQuestion={this.handleQuestionUpdate} />
       </div>
     )
   }
