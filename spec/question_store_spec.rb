@@ -22,6 +22,16 @@ describe QuestionStore do
 
       expect(questions.size).to eq(2)
     end
+
+    context "limit supplied" do
+      it "returns a limited number of questions" do
+        question_model = QuestionStore.new(question_data)
+
+        questions = question_model.all(limit: 1)
+
+        expect(questions.size).to eq(1)
+      end
+    end
   end
 
   describe "#find" do

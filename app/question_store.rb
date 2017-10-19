@@ -33,7 +33,13 @@ class QuestionStore
     update_question(question, updated_attributes)
   end
 
-  alias_method :all, :questions
+  def all(options = {})
+    if options[:limit]
+      questions.take(options[:limit])
+    else
+      questions
+    end
+  end
 
   private
 

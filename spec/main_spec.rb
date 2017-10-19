@@ -15,10 +15,29 @@ describe "Questions API" do
     it "provide all the questions" do
       get "/questions"
 
-      response_body = JSON.parse(last_response.body)
-
       expect(last_response.status).to eq(200)
-      expect(response_body.size).to eq(4000)
+    end
+
+    context "no limit param supplied" do
+      it "limits the questions to 100 by default" do
+        get "/questions"
+
+        response_body = JSON.parse(last_response.body)
+
+        expect(last_response.status).to eq(200)
+        expect(response_body.size).to eq(100)
+      end
+    end
+
+    context "limit param supplied" do
+      it "limits the questions to the provided param" do
+        get "/questions", "limit": "2"
+
+        response_body = JSON.parse(last_response.body)
+
+        expect(last_response.status).to eq(200)
+        expect(response_body.size).to eq(2)
+      end
     end
   end
 
