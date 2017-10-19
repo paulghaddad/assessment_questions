@@ -27232,12 +27232,53 @@ module.exports = Questions;
 
 const React = __webpack_require__(0);
 
+const QuestionDetails = props => {
+  return React.createElement(
+    'div',
+    null,
+    React.createElement(
+      'p',
+      null,
+      'Answer: ',
+      props.question.answer
+    ),
+    props.question.distractors.map((distractor, index) => {
+      return React.createElement(
+        'p',
+        { key: index },
+        'Distractor ',
+        index + 1,
+        ': ',
+        distractor
+      );
+    })
+  );
+};
+
 class Question extends React.Component {
+  constructor(props) {
+    super(props);
+    this.showQuestion = this.showQuestion.bind(this);
+    this.state = { showDetailsOn: false };
+  }
+
+  showQuestion(question) {
+    this.setState(prevState => ({
+      showDetailsOn: !prevState.showDetailsOn
+    }));
+  }
+
   render() {
     return React.createElement(
       'li',
       null,
-      this.props.question.title
+      this.props.question.title,
+      this.state.showDetailsOn && React.createElement(QuestionDetails, { question: this.props.question }),
+      React.createElement(
+        'button',
+        { onClick: this.showQuestion.bind(null, this.props.question) },
+        'Details'
+      )
     );
   }
 }
