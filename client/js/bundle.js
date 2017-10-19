@@ -3128,6 +3128,7 @@ class App extends React.Component {
     super(props);
     this.state = { questions: [] };
     this.handleQuestionUpdate = this.handleQuestionUpdate.bind(this);
+    this.handleQuestionRequest = this.handleQuestionRequest.bind(this);
   }
 
   handleQuestionUpdate(title, answer, distractors, id) {
@@ -3146,6 +3147,20 @@ class App extends React.Component {
       let newQuestions = existingQuestions.concat({ title: title, answer: answer, distractors: distractors });
       this.setState({ questions: newQuestions });
     }
+  }
+
+  handleQuestionRequest(id) {
+    console.log('Question requested', id);
+    let updatedQuestions = this.state.questions.slice();
+    axios.get('http://localhost:4567/questions/' + id).then(response => {
+      console.log(response);
+      updatedQuestions[id] = response.data;
+      this.setState({
+        questions: updatedQuestions
+      });
+    }).catch(function (error) {
+      console.log(error);
+    });
   }
 
   componentDidMount() {
@@ -3169,7 +3184,9 @@ class App extends React.Component {
       null,
       React.createElement(AppTitle, null),
       React.createElement(AppDescription, null),
-      React.createElement(Questions, { onCreateNewQuestion: this.handleQuestionUpdate, questions: this.state.questions }),
+      React.createElement(Questions, { onCreateNewQuestion: this.handleQuestionUpdate,
+        onShowQuestion: this.handleQuestionRequest,
+        questions: this.state.questions }),
       React.createElement(CreateQuestionForm, { onCreateNewQuestion: this.handleQuestionUpdate })
     );
   }
@@ -27321,7 +27338,10 @@ class Questions extends React.Component {
       'ul',
       null,
       Object.keys(this.props.questions).map(question => {
-        return React.createElement(Question, { onCreateNewQuestion: this.props.onCreateNewQuestion, key: question, question: this.props.questions[question] });
+        return React.createElement(Question, { key: question,
+          onCreateNewQuestion: this.props.onCreateNewQuestion,
+          onShowQuestion: this.props.onShowQuestion,
+          question: this.props.questions[question] });
       })
     );
   }
@@ -27369,6 +27389,7 @@ class Question extends React.Component {
   }
 
   showQuestion(question) {
+    this.props.onShowQuestion(question.id);
     this.setState(prevState => ({
       showDetailsOn: !prevState.showDetailsOn
     }));

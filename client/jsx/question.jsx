@@ -22,6 +22,7 @@ class Question extends React.Component {
   }
 
   showQuestion(question) {
+    this.props.onShowQuestion(question.id);
     this.setState(prevState => ({
       showDetailsOn: !prevState.showDetailsOn
     }));

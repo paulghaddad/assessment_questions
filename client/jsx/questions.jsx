@@ -6,7 +6,10 @@ class Questions extends React.Component {
     return (
       <ul>
         {Object.keys(this.props.questions).map(question => {
-          return <Question onCreateNewQuestion={this.props.onCreateNewQuestion} key={question} question={this.props.questions[question]} />
+          return <Question key={question}
+                           onCreateNewQuestion={this.props.onCreateNewQuestion}
+                           onShowQuestion={this.props.onShowQuestion}
+                           question={this.props.questions[question]} />
         })}
       </ul>
     )

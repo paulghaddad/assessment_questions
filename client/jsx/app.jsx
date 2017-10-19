@@ -29,6 +29,7 @@ class App extends React.Component {
     super(props);
     this.state = {questions: []};
     this.handleQuestionUpdate = this.handleQuestionUpdate.bind(this);
+    this.handleQuestionRequest = this.handleQuestionRequest.bind(this);
   }
 
   handleQuestionUpdate(title, answer, distractors, id) {
@@ -49,6 +50,22 @@ class App extends React.Component {
     }
   }
 
+  handleQuestionRequest(id) {
+    console.log('Question requested', id);
+    let updatedQuestions = this.state.questions.slice();
+    axios.get('http://localhost:4567/questions/' + id)
+    .then(response => {
+      console.log(response);
+      updatedQuestions[id] = response.data;
+      this.setState({
+        questions: updatedQuestions
+      });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
   componentDidMount() {
     axios.get('http://localhost:4567/questions')
     .then(response => {
@@ -60,7 +77,6 @@ class App extends React.Component {
     .catch(function (error) {
       console.log(error);
     });
-
   }
 
   componentWillUnmount() {
@@ -73,7 +89,9 @@ class App extends React.Component {
       <div>
         <AppTitle />
         <AppDescription />
-        <Questions onCreateNewQuestion={this.handleQuestionUpdate} questions={this.state.questions} />
+        <Questions onCreateNewQuestion={this.handleQuestionUpdate}
+                   onShowQuestion={this.handleQuestionRequest}
+                   questions={this.state.questions} />
         <CreateQuestionForm onCreateNewQuestion={this.handleQuestionUpdate} />
       </div>
     )
