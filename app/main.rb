@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "sinatra"
-require 'sinatra/cross_origin'
+require "sinatra/cross_origin"
 require "json"
 require "active_support"
 require "active_support/core_ext/object/json"
@@ -14,15 +14,14 @@ configure do
   enable :cross_origin
 end
 
-set :expose_headers, ['Content-Type', 'Location', 'Content-Location']
-
 before do
   response["Access-Control-Allow-Origin"] = "*"
   response.headers["Access-Control-Expose-Headers"] = "Location, Content-Location"
 end
 
 options "*" do
-  response.headers["Allow"] = "GET, POST, OPTIONS"
+  response.headers["Allow"] = "GET, POST, PUT, OPTIONS"
+  response.headers["Access-Control-Allow-Methods"] = "PATCH"
   response.headers["Access-Control-Allow-Headers"] = "Authorization, Content-Type, Accept, X-User-Email, X-Auth-Token"
   response.headers["Access-Control-Allow-Origin"] = "*"
 end
@@ -52,14 +51,15 @@ post "/questions" do
   base_url = "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
   content_type :json
   question = questions_data_store.create(params)
-  response.headers['Location'] = "#{base_url}/questions/#{question.id}"
-  response.headers['Content-Location'] = "/questions/#{question.id}"
+  response.headers["Location"] = "#{base_url}/questions/#{question.id}"
+  response.headers["Content-Location"] = "/questions/#{question.id}"
   status 201
 end
 
 patch "/questions/:id" do
+  request.body.rewind
+  params = JSON.parse(request.body.read)
   status 200
   content_type :json
   questions_data_store.update(params).to_json
 end
-

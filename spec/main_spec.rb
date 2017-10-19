@@ -59,18 +59,13 @@ describe "Questions API" do
     it "returns a single question" do
       post "/questions", new_question_params
 
-      response_body = JSON.parse(last_response.body)
-
       expect(last_response.status).to eq(201)
-      expect(response_body).to include("id" => 4001,
-                                       "title" => "What's your favorite color?",
-                                       "answer" => "red",
-                                       "distractors" => %w(orange green blue))
+      expect(last_response.headers["Content-Location"]).to eq("/questions/4001")
     end
   end
 
-  describe "#edit" do
-    it "edits a single question" do
+  describe "#update" do
+    it "updates a single question" do
       patch "/questions/1", updated_question_params
 
       response_body = JSON.parse(last_response.body)
@@ -86,11 +81,11 @@ describe "Questions API" do
   private
 
   def new_question_params
-    {
+    JSON.generate({
       "title" => "What's your favorite color?",
       "answer" => "red",
       "distractors" => %w(orange green blue)
-    }
+    })
   end
 
   def updated_question_params
