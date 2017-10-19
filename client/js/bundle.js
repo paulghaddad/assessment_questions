@@ -3130,6 +3130,7 @@ class App extends React.Component {
     this.handleQuestionUpdate = this.handleQuestionUpdate.bind(this);
     this.handleQuestionRequest = this.handleQuestionRequest.bind(this);
     this.createQuestion = this.createQuestion.bind(this);
+    this.updateQuestion = this.updateQuestion.bind(this);
   }
 
   handleQuestionUpdate(title, answer, distractors, id) {
@@ -3138,16 +3139,15 @@ class App extends React.Component {
 
     if (id !== undefined) {
       console.log('edit');
-      let questionsCopy = this.state.questions.slice();
-      let questionToUpdate = this.state.questions[id];
-      let updatedQuestion = Object.assign(questionToUpdate, { id: id, title: title, answer: answer, distractors: distractors });
-      questionsCopy[id] = updatedQuestion;
-      this.setState({ questions: questionsCopy });
+      this.updateQuestion(id, title, answer, distractors);
+      // let questionsCopy = this.state.questions.slice();
+      // let questionToUpdate = this.state.questions[id];
+      // let updatedQuestion = Object.assign(questionToUpdate, {id: id, title: title, answer: answer, distractors: distractors});
+      // questionsCopy[id] = updatedQuestion;
+      // this.setState({questions: questionsCopy});
     } else {
       console.log('create');
       this.createQuestion(title, answer, distractors);
-      // let newQuestions = existingQuestions.concat({title: title, answer: answer, distractors: distractors});
-      // this.setState({questions: newQuestions});
     }
   }
 
@@ -3177,6 +3177,21 @@ class App extends React.Component {
       let location = response.headers.location;
       console.log(location);
       this.handleQuestionRequest(location.match(/\d+$/)[0]);
+    }).catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  updateQuestion(id, title, answer, distractors) {
+    console.log('Question update', id, title, answer, distractors);
+    axios.patch(`http://localhost:4567/questions/${id}`, {
+      id: id,
+      title: title,
+      answer: answer,
+      distractors: distractors
+    }).then(response => {
+      console.log('updated!');
+      this.handleQuestionRequest(response.data.id);
     }).catch(function (error) {
       console.log(error);
     });
