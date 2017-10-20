@@ -8,21 +8,10 @@ import {
   Link
 } from 'react-router-dom'
 
-const Questions = require('./questions.jsx');
-const CreateQuestionForm = require('./create_question_form.jsx');
+import { PageHeader } from 'react-bootstrap';
 
-const AppTitle = () => {
-  return <h1>All Questions</h1>
-};
-
-const AppDescription = () => {
-  return <p>Click on a question to see its possible answers</p>
-};
-
-// const QUESTIONS = [
-//   { id: 0, title: "What is 7343 6708?", answer: "635", distractors: ["688", "7171", "7023"] },
-//   { id: 1, title: "What is your name?", answer: "Paul", distractors: ["Steve", "Bob", "Richard"] }
-//  ];
+import Questions from './questions.jsx';
+import QuestionForm from './question_form.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -35,7 +24,6 @@ class App extends React.Component {
   }
 
   handleQuestionUpdate(title, answer, distractors, id) {
-    // Make create call to API here.
     let existingQuestions = this.state.questions;
 
     if (id !== undefined) {
@@ -124,12 +112,11 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <AppTitle />
-        <AppDescription />
-        <Questions onCreateNewQuestion={this.handleQuestionUpdate}
+        <PageHeader className="text-center">Pluralsight Skill IQ<small> All our questions</small></PageHeader>
+        <QuestionForm onQuestionChange={this.handleQuestionUpdate} action="Create" style={{marginBotton: "5em"}} />
+        <Questions onQuestionChange={this.handleQuestionUpdate}
                    onShowQuestion={this.handleQuestionRequest}
                    questions={this.state.questions} />
-        <CreateQuestionForm onCreateNewQuestion={this.handleQuestionUpdate} />
       </div>
     )
   }
