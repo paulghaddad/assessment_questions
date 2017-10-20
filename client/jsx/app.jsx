@@ -2,6 +2,11 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const axios = require('axios');
 
+let questionsApiBaseUrl;
+
+// questionsApiBaseUrl = 'https://infinite-lowlands-99815.herokuapp.com';
+questionsApiBaseUrl = 'http://localhost:4567';
+
 import {
   BrowserRouter as Router,
   Route,
@@ -27,15 +32,8 @@ class App extends React.Component {
     let existingQuestions = this.state.questions;
 
     if (id !== undefined) {
-      console.log('edit');
       this.updateQuestion(id, title, answer, distractors);
-      // let questionsCopy = this.state.questions.slice();
-      // let questionToUpdate = this.state.questions[id];
-      // let updatedQuestion = Object.assign(questionToUpdate, {id: id, title: title, answer: answer, distractors: distractors});
-      // questionsCopy[id] = updatedQuestion;
-      // this.setState({questions: questionsCopy});
     } else {
-      console.log('create');
       this.createQuestion(title, answer, distractors);
     }
   }
@@ -43,7 +41,7 @@ class App extends React.Component {
   handleQuestionRequest(id) {
     console.log('Question requested', id);
     let updatedQuestions = this.state.questions.slice();
-    axios.get('http://localhost:4567/questions/' + id)
+    axios.get(`${questionsApiBaseUrl}/questions/${id}`)
     .then(response => {
       console.log(response);
       updatedQuestions[id - 1] = response.data;
@@ -57,17 +55,13 @@ class App extends React.Component {
   }
 
   createQuestion(title, answer, distractors) {
-    console.log('Question creation', title, answer, distractors);
-    axios.post('http://localhost:4567/questions', {
+    axios.post(`${questionsApiBaseUrl}/questions`, {
       title: title,
       answer: answer,
       distractors: distractors
     })
     .then(response => {
-      console.log('created!');
-      console.log(response.headers);
       let location = response.headers.location;
-      console.log(location);
       this.handleQuestionRequest(location.match(/\d+$/)[0]);
     })
     .catch(function (error) {
@@ -76,15 +70,13 @@ class App extends React.Component {
   }
 
   updateQuestion(id, title, answer, distractors) {
-    console.log('Question update', id, title, answer, distractors);
-    axios.patch(`http://localhost:4567/questions/${id}`, {
+    axios.patch(`${questionsApiBaseUrl}/questions/${id}`, {
       id: id,
       title: title,
       answer: answer,
       distractors: distractors
     })
     .then(response => {
-      console.log('updated!');
       this.handleQuestionRequest(response.data.id);
     })
     .catch(function (error) {
@@ -93,7 +85,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:4567/questions')
+    axios.get(`${questionsApiBaseUrl}/questions`)
     .then(response => {
       console.log(response);
       this.setState({
