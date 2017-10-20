@@ -7,8 +7,12 @@ This is a client-side app built with React.js. It is backed by an API built with
 # Installation
 To install the app:
 
-* Run `npm i` from inside the `client` directory.
+* Clone the repo and change into the repo's directory: `cd assessment_questions`.
 * Run `bundle install` from the top-level of the project. Note that Ruby 2.4.1 is used for the project.
+* Run `cd client && npm i` from inside the `client` directory.
+* Start the API: `ruby app/main.rb`.
+* Start the webpack server: `npm run start:dev-server` (from inside the `client` directory.
+* Visit `http://localhost:8080` to see the app!
 
 # Design Decisions
 
