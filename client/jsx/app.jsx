@@ -10,13 +10,13 @@ questionsApiBaseUrl = 'http://localhost:4567';
 import {
   BrowserRouter as Router,
   Route,
-  Link
 } from 'react-router-dom'
+
+import { Button } from 'react-bootstrap';
 
 import { PageHeader } from 'react-bootstrap';
 import Questions from './questions.jsx';
 import QuestionForm from './question_form.jsx';
-
 import SearchBox from './search_box.jsx';
 
 
@@ -29,6 +29,7 @@ class App extends React.Component {
     this.createQuestion = this.createQuestion.bind(this);
     this.updateQuestion = this.updateQuestion.bind(this);
     this.handleSearchRequest = this.handleSearchRequest.bind(this);
+    this.handleSort = this.handleSort.bind(this);
   }
 
   handleQuestionUpdate(title, answer, distractors, id) {
@@ -101,6 +102,20 @@ class App extends React.Component {
     });
   }
 
+  handleSort() {
+    console.log('sorting');
+    axios.get(`${questionsApiBaseUrl}/questions?sort=title`)
+    .then(response => {
+      console.log(response);
+      this.setState({
+        questions: response.data
+      });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
   componentDidMount() {
     axios.get(`${questionsApiBaseUrl}/questions`)
     .then(response => {
@@ -123,6 +138,7 @@ class App extends React.Component {
       <div>
         <PageHeader className="text-center">Pluralsight Skill IQ<small> All our questions</small></PageHeader>
         <QuestionForm onQuestionChange={this.handleQuestionUpdate} action="Create" style={{marginBotton: "5em"}} />
+        <Button bsStyle="link" onClick={this.handleSort}>Sort by Title</Button>
         <SearchBox onSearch={this.handleSearchRequest} />
         <Questions onQuestionChange={this.handleQuestionUpdate}
                    onShowQuestion={this.handleQuestionRequest}

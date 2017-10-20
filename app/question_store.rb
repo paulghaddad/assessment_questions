@@ -40,6 +40,10 @@ class QuestionStore
       all_questions = search(options[:search].downcase)
     end
 
+    if options[:sort]
+      all_questions = all_questions.sort_by(&:answer)
+    end
+
     if options[:limit]
       all_questions.take(options[:limit])
     else

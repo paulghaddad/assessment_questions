@@ -36,8 +36,9 @@ get "/questions" do
   content_type :json
   limit = params["limit"] ? Integer(params["limit"]) : QUESTIONS_LIMIT
   search_term = params["search"]
+  sort = params["sort"]
 
-  questions_data_store.all(limit: limit, search: search_term).to_json
+  questions_data_store.all(limit: limit, search: search_term, sort: sort).to_json
 end
 
 get "/questions/:id" do

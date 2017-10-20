@@ -89,9 +89,10 @@ describe "Questions API" do
   end
 
   def updated_question_params
-    {
+    JSON.generate({
+      "id" => "1",
       "title" => "What's an update?",
       "answer" => "Changing a Question",
-    }
+    })
   end
 end
