@@ -34,10 +34,16 @@ class QuestionStore
   end
 
   def all(options = {})
+    all_questions = questions
+
+    if options[:search]
+      all_questions = search(options[:search].downcase)
+    end
+
     if options[:limit]
-      questions.take(options[:limit])
+      all_questions.take(options[:limit])
     else
-      questions
+      all_questions
     end
   end
 
@@ -62,5 +68,15 @@ class QuestionStore
     end
 
     question
+  end
+
+  def search(term)
+    questions.inject([]) do |questions_matching_search, question|
+      if question.title.downcase.match(term) || question.answer.downcase.match(term)
+        questions_matching_search << question
+      else
+        questions_matching_search
+      end
+    end
   end
 end
